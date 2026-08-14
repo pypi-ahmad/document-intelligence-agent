@@ -7,7 +7,6 @@ import re
 import uuid
 from pathlib import Path
 
-import numpy as np
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 import config
@@ -59,14 +58,6 @@ def safe_json_loads(text: str) -> dict | list | None:
             except json.JSONDecodeError:
                 return None
         return None
-
-
-def cosine_similarity(a: list[float], b: list[float]) -> float:
-    va, vb = np.asarray(a), np.asarray(b)
-    denom = np.linalg.norm(va) * np.linalg.norm(vb)
-    if denom == 0:
-        return 0.0
-    return float(np.dot(va, vb) / denom)
 
 
 def truncate(text: str, max_chars: int) -> str:

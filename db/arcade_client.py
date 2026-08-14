@@ -165,6 +165,10 @@ class ArcadeDBClient:
     def delete_document(self, doc_id: str) -> None:
         self.command("DELETE VERTEX FROM Chunk WHERE doc_id = :id", {"id": doc_id})
         self.command("DELETE VERTEX FROM Document WHERE id = :id", {"id": doc_id})
+        # Entities that were only mentioned by this document's (now-deleted)
+        # chunks are orphaned -- drop them so they don't linger in future
+        # retrieval, communities, or stats.
+        self.command("DELETE VERTEX FROM Entity WHERE in('MENTIONS').size() = 0")
 
     # -- entities / relations ----------------------------------------------
 

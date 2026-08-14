@@ -68,7 +68,7 @@ def comparator(state: QueryState) -> dict:
         note = ""
 
     if isinstance(parsed, dict):
-        answer = parsed.get("summary_answer", raw) + note
+        answer = (parsed.get("summary_answer") or raw) + note
     else:
         answer = raw + note
         parsed = None

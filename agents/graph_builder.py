@@ -80,7 +80,10 @@ def graph_builder(state: IngestState) -> dict:
             chunk["chunk_id"], doc_id, doc_name, chunk["page"], chunk["text"], vector
         )
 
-        entities, relations = extract_entities_relations(chunk["text"])
+        try:
+            entities, relations = extract_entities_relations(chunk["text"])
+        except Exception:  # local LLM hiccup shouldn't abort the whole document
+            entities, relations = [], []
         entity_id_by_name: dict[str, str] = {}
         for entity in entities:
             entity_id = client.upsert_entity(

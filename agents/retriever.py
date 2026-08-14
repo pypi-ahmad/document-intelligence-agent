@@ -73,10 +73,20 @@ def retriever(state: QueryState) -> dict:
             reasoning_path.append(f"pulled {len(community_context)} community summaries")
 
     merged: dict[str, dict] = {c["id"]: c for c in vector_hits}
+    graph_only_ids = [c["id"] for c in graph_chunks if c["id"] not in merged]
     for chunk in graph_chunks:
         merged.setdefault(chunk["id"], chunk)
 
-    ranked = sorted(merged.values(), key=lambda c: c.get("distance", 1.0))[: config.TOP_K_FINAL]
+    # Vector hits carry a real similarity "distance" and are ranked by it.
+    # Graph-only chunks have no such score -- giving them a fake default
+    # distance would silently sort them below every vector hit and drop
+    # them from the final top-K, defeating hybrid retrieval. Instead, rank
+    # vector hits by distance and fill remaining slots with graph hits.
+    vector_ranked = sorted(
+        (merged[c["id"]] for c in vector_hits), key=lambda c: c.get("distance", 1.0)
+    )
+    graph_only = [merged[cid] for cid in graph_only_ids]
+    ranked = (vector_ranked + graph_only)[: config.TOP_K_FINAL]
 
     return {
         "entities_in_question": entity_names,
