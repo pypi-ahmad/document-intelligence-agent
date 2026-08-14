@@ -209,3 +209,5 @@ the cost of latency).
 ## Links
 
 - Repository: https://github.com/pypi-ahmad/document-intelligence-agent
+
+<p align="center">Made with ❤️ by Ahmad Mujtaba</p>
