@@ -39,6 +39,16 @@ uv run streamlit run app.py
 
 Windows users can run `launch.cmd` instead, which does all of the above.
 
+## Lint and typecheck
+
+Run these before opening a pull request — both are configured and pass
+clean on `main`:
+
+```bash
+uv run ruff check .
+uv run ty check
+```
+
 ## Manual verification
 
 There's no automated test suite yet — that's an open item, not an oversight

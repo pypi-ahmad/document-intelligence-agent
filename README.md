@@ -242,11 +242,15 @@ the cost of latency).
 - Incremental re-enrichment (only re-cluster communities touched by newly
   added documents, instead of a full recompute)
 - Authentication/multi-tenant knowledge bases
+- Automated tests and CI (lint/typecheck already pass via `ruff`/`ty`, but
+  there's no test suite or CI workflow yet)
 
 ## Documentation
 
 | Document | What it is |
 |---|---|
+| [USAGE.md](USAGE.md) | Step-by-step walkthrough of every sidebar control and mode, plus troubleshooting |
+| [ARCHITECTURE.md](ARCHITECTURE.md) | Cited technical deep-dive: graph construction, enrichment, hybrid retrieval |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | How to set up, test, and send a PR |
 | [SUPPORT.md](SUPPORT.md) | How to get help and report bugs |
 | [SECURITY.md](SECURITY.md) | How to report a vulnerability, ArcadeDB credential/binding notes |
