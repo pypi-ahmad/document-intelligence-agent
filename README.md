@@ -8,6 +8,47 @@ a Streamlit chat UI.
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
+**Repository:** [github.com/pypi-ahmad/document-intelligence-agent](https://github.com/pypi-ahmad/document-intelligence-agent)
+
+## Contents
+
+- [Open source and community](#open-source-and-community)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [How It Works](#how-it-works)
+- [Installation & Setup](#installation--setup)
+- [Environment Variables](#environment-variables)
+- [Usage](#usage)
+- [Configuration Options](#configuration-options)
+- [Future Improvements](#future-improvements)
+- [Documentation](#documentation)
+- [License](#license)
+
+## Open source and community
+
+This is a free, open-source (MIT), community-driven project. Cloning,
+forking, testing, filing bugs, suggesting features, and sending pull
+requests are all welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and
+[SUPPORT.md](SUPPORT.md). This project does not want or accept donations,
+sponsorship, or paid support of any kind; testing and patches are worth
+more here than money.
+
+You run this entirely on your own machine, with your own API keys and your
+own ArcadeDB container. Nobody but you sees your documents, extracted
+knowledge graph, or generated answers — and you are responsible for
+everything you ingest and every answer you rely on. See
+[DISCLAIMER.md](DISCLAIMER.md) for the full breakdown, and
+[SECURITY.md](SECURITY.md) for how to report a vulnerability (including an
+important note on ArcadeDB's default credentials).
+
+> [!IMPORTANT]
+> Entity extraction, routing, and simple answers run on your local Ollama
+> model. Multi-hop, comparison, contradiction, and cross-document
+> verification questions are sent to whichever "complex" provider you
+> configure (an OpenAI-compatible endpoint, or Agnes AI) — treat that
+> exactly like sending the document content to that provider yourself.
+
 ## Features
 
 - **Multi-document ingestion** — upload PDFs or point at a server-side folder; batch progress shown in the UI.
@@ -202,6 +243,19 @@ the cost of latency).
   added documents, instead of a full recompute)
 - Authentication/multi-tenant knowledge bases
 
+## Documentation
+
+| Document | What it is |
+|---|---|
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to set up, test, and send a PR |
+| [SUPPORT.md](SUPPORT.md) | How to get help and report bugs |
+| [SECURITY.md](SECURITY.md) | How to report a vulnerability, ArcadeDB credential/binding notes |
+| [DISCLAIMER.md](DISCLAIMER.md) | No-warranty, data responsibility, and local-vs-cloud data flow |
+| [LICENSE](LICENSE) | MIT license text |
+
+This project does not want or accept donations, sponsorship, or paid
+support of any kind.
+
 ## License
 
 [MIT](LICENSE)
@@ -209,3 +263,5 @@ the cost of latency).
 ## Links
 
 - Repository: https://github.com/pypi-ahmad/document-intelligence-agent
+
+<p align="center">Made with ❤️ by Ahmad Mujtaba</p>
