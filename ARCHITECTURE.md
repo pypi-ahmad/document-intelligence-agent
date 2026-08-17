@@ -48,6 +48,19 @@ is the only UI entry point; there is no CLI or API entry point.
 | `launch.sh` | Linux/macOS equivalent of `launch.cmd` | `launch.sh` |
 | `uv run ruff check .` | Lint (`E, F, W, I, UP, B, SIM, RUF, N, C4`) | `pyproject.toml:18-29` |
 | `uv run ty check` | Typecheck | `pyproject.toml:20,31-32` |
+| `uv run pytest -v` | Run the pure-logic test suite (`tests/`) | `tests/test_utils.py`, `tests/test_comparator.py` |
+
+**CI now exists** (`.github/workflows/ci.yml`, per MODERNIZATION_PLAN.md Phase
+1): `uv sync --frozen --all-groups` → `ruff check .` → `ty check` →
+`pytest -v`, on push/PR to `main`, Python 3.14 (pinned via `.python-version`).
+**Scope is intentionally narrow**: lint and typecheck cover the whole
+codebase, but the test step covers only 5 pure-logic functions with no
+LLM/DB dependency (`utils.py`'s four helpers, `agents/comparator.py`'s
+`_grouped_context`). The LLM/DB-integrated pipeline — ingestion,
+retrieval, answering, verification — is **not** covered by CI; it remains
+covered only by `CONTRIBUTING.md`'s manual verification checklist. Not yet
+an enforced required status check — that's a manual GitHub → Settings →
+Branches step.
 
 Both lint and typecheck commands are configured as dev dependencies with
 real rule/environment config and **pass clean today** (verified live,
@@ -75,6 +88,8 @@ Confirmed by directory listing, 2026-08-17.
 | `agents/verifier.py` | Groundedness check + cross-document contradiction pass |
 | `db/arcade_client.py` | ArcadeDB REST client: schema, CRUD, BFS, vector search, stats, reset |
 | `arcadedb-data/` | Docker volume: persisted graph data. Not committed. |
+| `tests/` | `pytest` suite for the pure-logic slice: `test_utils.py`, `test_comparator.py` |
+| `.github/workflows/ci.yml` | Lint + typecheck (whole repo) + pytest (pure-logic slice) on push/PR to `main` |
 
 ## Deployment & runtime surface
 
@@ -106,8 +121,14 @@ for this today (`launch.cmd`, `launch.sh`, README's manual setup).
   REST API, and whichever complex-LLM endpoint is configured.
 - **Background jobs:** none; ingestion and enrichment run synchronously
   inside the Streamlit request that triggered them (`app.py:59-73`).
-- **CI/CD:** none exists.
-- **Testing:** none exists — no test files, no test runner wired up.
+- **CI/CD:** `.github/workflows/ci.yml` — lint + typecheck (whole repo) +
+  pytest (pure-logic slice only) on push/PR to `main`; not yet an enforced
+  required status check.
+- **Testing:** `tests/test_utils.py`, `tests/test_comparator.py` — 11
+  `pytest` tests covering the 5 functions with no LLM/DB dependency. The
+  LLM/DB-integrated pipeline has no automated test coverage; see
+  MODERNIZATION_PLAN.md § 3 for why that was a deliberate scoping decision,
+  not an oversight.
 
 ## Architectural blueprint
 
@@ -262,7 +283,8 @@ summaries for corpus-level context.
 |---|---|
 | Pipeline structure, node responsibilities, mode routing | High — read directly from `graph.py`, `agents/*.py` |
 | ArcadeDB schema and query shapes | High — read directly from `db/arcade_client.py` |
-| No CI/tests exist | High — confirmed by directory listing, not inference |
+| CI exists and covers the pure-logic slice only | High — `.github/workflows/ci.yml` authored this pass, `uv run pytest`/`ruff`/`ty` all verified green live, 2026-08-17 |
+| LLM/DB-integrated pipeline has no automated coverage | High — confirmed by reading every test file added; none import `graph.py`, `agents/graph_builder.py`, `agents/retriever.py`, `agents/router.py`, `agents/verifier.py`, or `db/arcade_client.py` |
 | Community detection and hierarchical summarization logic | High — read directly from `agents/enricher.py` |
 | Ollama model versions being "current" (no per-digest pin) | Inferred — models are pulled by name only, no way to verify which exact model version is running without querying Ollama directly |
 | ArcadeDB default-credential/network-binding exposure | High — read directly from `launch.cmd`, `launch.sh`, and the README's manual `docker run` command |

@@ -40,21 +40,30 @@ uv run streamlit run app.py
 Windows users can run `launch.cmd` instead, and Linux/macOS users can run
 `./launch.sh` — both do all of the above, including first-time setup.
 
-## Lint and typecheck
+## Automated checks
 
-Run these before opening a pull request — both are configured and pass
-clean on `main`:
+Run these before opening a pull request — all three are configured, pass
+clean on `main`, and also run in CI (`.github/workflows/ci.yml`):
 
 ```bash
 uv run ruff check .
 uv run ty check
+uv run pytest -v
 ```
+
+**Scope note:** `pytest` covers only the pure-logic slice — functions with
+no LLM or ArcadeDB dependency (`utils.py`'s helpers,
+`agents/comparator.py`'s `_grouped_context`). The actual ingestion/query
+pipeline (everything that calls a local or complex LLM, or ArcadeDB) has
+**no automated test coverage** — that's a deliberate scoping decision (see
+[MODERNIZATION_PLAN.md](MODERNIZATION_PLAN.md) § 3), not an oversight. It's
+covered only by the manual verification below.
 
 ## Manual verification
 
-There's no automated test suite yet — that's an open item, not an oversight
-to route around (see [Future Improvements](README.md#future-improvements)).
-Before opening a pull request for a UI-visible or pipeline-behavior change:
+This is the only safety net for the LLM/DB-integrated pipeline — treat it
+as required, not optional, for any change in that area. Before opening a
+pull request for a UI-visible or pipeline-behavior change:
 
 1. Ingest at least one synthetic or redistributable PDF and confirm it
    completes (chunking → entity extraction → community enrichment).

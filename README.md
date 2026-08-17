@@ -255,8 +255,11 @@ the cost of latency).
 - Incremental re-enrichment (only re-cluster communities touched by newly
   added documents, instead of a full recompute)
 - Authentication/multi-tenant knowledge bases
-- Automated tests and CI (lint/typecheck already pass via `ruff`/`ty`, but
-  there's no test suite or CI workflow yet)
+- Automated test coverage for the LLM/DB-integrated pipeline (ingestion,
+  retrieval, answering, verification) — CI currently covers only lint,
+  typecheck, and a small pure-logic test suite; see
+  [MODERNIZATION_PLAN.md](MODERNIZATION_PLAN.md) for why that's a deliberate
+  scoping decision for a solo local tool, not an oversight
 
 ## Documentation
 
