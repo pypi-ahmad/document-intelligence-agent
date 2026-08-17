@@ -22,7 +22,7 @@ no remote API surface beyond what you choose to run on your own machine.
 
 ## ArcadeDB default credentials
 
-`launch.cmd` and the README's manual setup both start ArcadeDB with the
+`launch.cmd`, `launch.sh`, and the README's manual setup all start ArcadeDB with the
 password `playwithdata` (ArcadeDB's own documented default) and publish
 ports `2480`/`2424` on all interfaces (`-p 2480:2480`, not
 `-p 127.0.0.1:2480:2480`). This is fine for a single-user machine on a

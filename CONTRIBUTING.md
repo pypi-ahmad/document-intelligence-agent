@@ -37,7 +37,8 @@ cp .env.example .env   # fill in the keys you want to test with
 uv run streamlit run app.py
 ```
 
-Windows users can run `launch.cmd` instead, which does all of the above.
+Windows users can run `launch.cmd` instead, and Linux/macOS users can run
+`./launch.sh` — both do all of the above, including first-time setup.
 
 ## Lint and typecheck
 

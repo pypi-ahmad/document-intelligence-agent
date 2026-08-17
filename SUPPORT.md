@@ -28,7 +28,7 @@ below instead — they're worth more than money here.
 Search [existing issues](https://github.com/pypi-ahmad/document-intelligence-agent/issues)
 before opening a new one. When reporting a problem, include:
 
-- your OS, and whether you used `launch.cmd` or manual setup;
+- your OS, and whether you used `launch.cmd`/`launch.sh` or manual setup;
 - which LLM providers/models were configured (local Ollama model, and the
   "complex" provider — OpenAI-compatible or Agnes AI);
 - whether the issue happened during ingestion or during a query, and which

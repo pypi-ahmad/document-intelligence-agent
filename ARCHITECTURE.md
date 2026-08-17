@@ -33,18 +33,19 @@ database accessed over its HTTP REST API (`db/arcade_client.py`).
 
 ## Entry point
 
-`uv run streamlit run app.py`, or `launch.cmd` (Windows: installs `uv` if
-missing, `uv sync`, pulls the two Ollama models if absent, starts the
-ArcadeDB container, launches). `app.py` is the only UI entry point; there is
-no CLI or API entry point.
+`uv run streamlit run app.py`, or `launch.cmd`/`launch.sh` (installs `uv` if
+missing, `uv sync` — creating `.venv` in the project root, pulls the two
+Ollama models if absent, starts the ArcadeDB container, launches). `app.py`
+is the only UI entry point; there is no CLI or API entry point.
 
 ## Commands & Verification Inventory
 
 | Command | Purpose | Evidence |
 |---|---|---|
-| `uv sync` | Install dependencies from `uv.lock` | `pyproject.toml`, `README.md` |
+| `uv sync` | Install dependencies from `uv.lock` (creates `.venv` in the project root) | `pyproject.toml`, `README.md` |
 | `uv run streamlit run app.py` | Run the app | `README.md` |
-| `launch.cmd` | Windows one-click: installs `uv`/checks Ollama+Docker, pulls models, starts ArcadeDB, launches | `launch.cmd` |
+| `launch.cmd` | Windows one-click: first-time setup + launch (installs `uv`/checks Ollama+Docker, pulls models, starts ArcadeDB, launches) | `launch.cmd` |
+| `launch.sh` | Linux/macOS equivalent of `launch.cmd` | `launch.sh` |
 | `uv run ruff check .` | Lint (`E, F, W, I, UP, B, SIM, RUF, N, C4`) | `pyproject.toml:18-29` |
 | `uv run ty check` | Typecheck | `pyproject.toml:20,31-32` |
 
@@ -92,7 +93,7 @@ knowable rather than inferred. The two Ollama models (`qwen3.5:2b`,
 `nomic-embed-text-v2-moe`) are pulled by name, not pinned to a specific
 Ollama-registry digest — an `ollama pull` on a different day could resolve
 to a different underlying model version. No version-pin mechanism exists
-for this today (`launch.cmd`, README's manual setup).
+for this today (`launch.cmd`, `launch.sh`, README's manual setup).
 
 ## Data, APIs, background jobs, CI/CD, testing
 
@@ -264,7 +265,7 @@ summaries for corpus-level context.
 | No CI/tests exist | High — confirmed by directory listing, not inference |
 | Community detection and hierarchical summarization logic | High — read directly from `agents/enricher.py` |
 | Ollama model versions being "current" (no per-digest pin) | Inferred — models are pulled by name only, no way to verify which exact model version is running without querying Ollama directly |
-| ArcadeDB default-credential/network-binding exposure | High — read directly from `launch.cmd` and the README's manual `docker run` command |
+| ArcadeDB default-credential/network-binding exposure | High — read directly from `launch.cmd`, `launch.sh`, and the README's manual `docker run` command |
 
 ## Footnotes
 

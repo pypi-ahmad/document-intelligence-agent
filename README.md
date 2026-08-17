@@ -98,7 +98,8 @@ important note on ArcadeDB's default credentials).
 │   └── comparator.py         # Multi-document comparison / contradiction specialist
 ├── db/
 │   └── arcade_client.py      # ArcadeDB HTTP REST client + full graph schema
-├── launch.cmd                # One double-click: installs/checks deps, starts ArcadeDB + Streamlit
+├── launch.cmd                # Windows: first-time setup + launch (uv sync, models, ArcadeDB, Streamlit)
+├── launch.sh                 # Linux/macOS: same as launch.cmd
 ├── .env.example               # Template for all environment variables
 └── pyproject.toml            # uv project + ruff/ty config
 ```
@@ -145,10 +146,22 @@ important note on ArcadeDB's default credentials).
 
 ### Quick start (Windows)
 
-Double-click **`launch.cmd`**. It installs `uv` if missing, runs `uv sync`,
-pulls the required Ollama models if they aren't already present, starts an
-ArcadeDB container (data persisted to `.\arcadedb-data`), and launches the
-app.
+Double-click **`launch.cmd`**. It installs `uv` if missing, runs `uv sync`
+(creating `.venv` in the project root), pulls the required Ollama models if
+they aren't already present, starts an ArcadeDB container (data persisted to
+`.\arcadedb-data`), and launches the app.
+
+### Quick start (Linux / macOS)
+
+```bash
+chmod +x launch.sh   # only needed once, if the executable bit was lost
+./launch.sh
+```
+
+Does the same as `launch.cmd`: installs `uv` if missing, runs `uv sync`
+(creating `.venv` in the project root), pulls the required Ollama models,
+starts an ArcadeDB container (data persisted to `./arcadedb-data`), and
+launches the app.
 
 ### Manual setup (any OS)
 

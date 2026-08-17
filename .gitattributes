@@ -1,0 +1,2 @@
+*.sh text eol=lf
+launch.cmd text eol=crlf

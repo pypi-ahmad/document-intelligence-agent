@@ -5,10 +5,14 @@ setup instructions, see the [README](README.md#installation--setup) first.
 
 ## Starting the app
 
-- Windows one-click: double-click `launch.cmd`. It installs `uv` if
-  missing, runs `uv sync`, pulls the two required Ollama models if they
+- Windows one-click: double-click `launch.cmd`.
+- Linux/macOS one-step: `./launch.sh` (run `chmod +x launch.sh` once first
+  if needed).
+- Either script installs `uv` if missing, runs `uv sync` (creating `.venv`
+  in the project root), pulls the two required Ollama models if they
   aren't already present, starts (or reuses) the ArcadeDB container, and
-  launches Streamlit.
+  launches Streamlit — this is the full first-time setup, not just a
+  daily-start shortcut.
 - Manual (any OS): make sure Ollama is running and ArcadeDB's Docker
   container is up (see the README's manual setup), then run
   `uv run streamlit run app.py`.
@@ -18,7 +22,7 @@ Ollama model gets warmed up (loaded into memory) before the UI is usable,
 with a spinner explaining why.
 
 If the app immediately errors with "Cannot reach ArcadeDB," the container
-isn't running — start it per the README, or re-run `launch.cmd`.
+isn't running — start it per the README, or re-run `launch.cmd`/`launch.sh`.
 
 ## Sidebar: Ingest documents
 
@@ -107,7 +111,7 @@ list):
 
 | Symptom | Likely cause / fix |
 |---|---|
-| "Cannot reach ArcadeDB" on startup | The container isn't running. Start it per the README's manual `docker run` command, or re-run `launch.cmd`. |
+| "Cannot reach ArcadeDB" on startup | The container isn't running. Start it per the README's manual `docker run` command, or re-run `launch.cmd`/`launch.sh`. |
 | App warms up the local model on every restart | Expected — Ollama unloads idle models from memory; the warm-up spinner runs once per app process start, not once ever. |
 | Ingestion finishes but entities/communities are empty | The local model may not be reliably returning valid JSON for extraction. Try a larger `OLLAMA_MODEL`, or check the terminal for extraction errors (they're logged, not raised, so ingestion still completes). |
 | "AGNES_API_KEY is not set but COMPLEX_LLM_PROVIDER=agnes" (or the OpenAI equivalent) | Set the matching API key in `.env` and restart the app, or switch `COMPLEX_LLM_PROVIDER` back to a provider you do have a key for. |
