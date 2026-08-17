@@ -216,8 +216,10 @@ Nothing in `agents/`, `db/`, or `embeddings.py` imports `app.py` or
   latency scale with mode — simple/multi-hop/summary questions never incur
   a second complex-provider call just to verify their answer.
 
-**Governance:** none — no CODEOWNERS, no branch protection, no CI to
-protect against in the first place.
+**Governance:** `.github/workflows/ci.yml` exists and runs (lint + typecheck
++ pure-logic tests), but no CODEOWNERS and no branch protection / required
+status check — CI runs on every push/PR but does not yet block merges
+(manual step, see MODERNIZATION_PLAN.md § 9).
 
 **How to add a feature:** add or modify a node function in `graph.py`
 (ingestion or query graph), extend `IngestState`/`QueryState` in `state.py`
@@ -225,6 +227,10 @@ if new fields are needed, add any new ArcadeDB schema/queries to
 `db/arcade_client.py` (it owns the whole schema — don't scatter raw SQL
 elsewhere), and update `README.md`'s "How It Works" section and project
 structure tree in the same change (convention only, nothing enforces it).
+If the new logic has no LLM/DB dependency, add a `pytest` test under
+`tests/` — CI will actually run it; if it does call an LLM or ArcadeDB, add
+a step to `CONTRIBUTING.md`'s manual verification checklist instead, since
+CI can't cover it (see the Commands & Verification Inventory above).
 
 ## Subsystem deep-dives
 
