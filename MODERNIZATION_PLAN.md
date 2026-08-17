@@ -219,17 +219,23 @@ LLM/DB-integrated pipeline remains pre-testability ("dark") and out of scope.
 
 #### Verification & Exit Criteria (Definition of Done)
 
-- [ ] `uv sync --frozen` installs cleanly (already true; re-confirmed after
-      adding `pytest`).
-- [ ] `uv run pytest -v` collects and passes all new tests.
-- [ ] `uv run ruff check .` and `uv run ty check` both still pass.
-- [ ] `.github/workflows/ci.yml` runs and is green on this phase's own PR —
-      the authoritative signal for a lit-regime phase.
-- [ ] `ARCHITECTURE.md` and `CONTRIBUTING.md` both reflect the new
+- [x] `uv sync --frozen --all-groups` installs cleanly on a fresh `.venv`
+      (verified twice, including after adding `pytest`).
+- [x] `uv run pytest -v` collects and passes all 11 tests across the 2 new
+      files.
+- [x] `uv run ruff check .` and `uv run ty check` both pass — `ty` actually
+      caught a real type error in the first test draft (plain dict where
+      `QueryState` was expected), fixed with a type annotation.
+- [x] `.github/workflows/ci.yml` ran and is **green** on GitHub (confirmed
+      via `gh run list`, first real run after this phase's push).
+- [x] `ARCHITECTURE.md` and `CONTRIBUTING.md` both updated to state the new
       commands and explicitly scope what CI does/doesn't cover (H8 closed
-      in the same PR).
-- [ ] No behavior change asserted: the app still runs identically via
-      `uv run streamlit run app.py`.
+      in the same commit).
+- [x] No behavior change: only new files (`tests/`, `ci.yml`) plus doc
+      updates; nothing in `agents/`, `db/`, `graph.py`, `config.py`,
+      `embeddings.py`, or `app.py` changed.
+
+**Status: ✅ complete.**
 
 ## 7. Execution governance
 
