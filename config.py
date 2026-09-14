@@ -2,7 +2,11 @@
 
 Every value has a safe local-first default so the app runs against the
 Ollama models already pulled on this machine. Nothing here hardcodes a
-secret -- API keys are read from the environment only.
+secret -- API keys are read from the environment only. This module must not
+import anything that itself reads config at import time in a way that could
+run before `load_dotenv()` below has executed.
+Next file to read: `embeddings.py` (local embedding wrapper) or
+`db/arcade_client.py` (the other consumer of these env-derived constants).
 """
 
 from __future__ import annotations
@@ -70,6 +74,10 @@ def get_llm(role: str = "local"):
     role="local"   -> Ollama model: entity extraction, routing, simple answers.
     role="complex" -> GPT (OpenAI-compatible) or Agnes: multi-hop, verification,
                        comparison, synthesis. Selected by COMPLEX_LLM_PROVIDER.
+
+    Missing-API-key validation is intentionally lazy (checked here, not at
+    import time): a "local"-only session should work with no complex-provider
+    key configured at all.
     """
     if role == "local":
         from langchain_ollama import ChatOllama

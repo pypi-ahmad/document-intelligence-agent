@@ -1,4 +1,9 @@
-"""Retriever: hybrid vector + graph (multi-hop) retrieval."""
+"""Retriever: hybrid vector + graph (multi-hop) retrieval.
+
+Reads only -- never writes to ArcadeDB. Next file to read: `agents/answerer.py`
+(simple/multihop/summary) or `agents/comparator.py` (comparison/contradiction),
+selected by `graph.py`'s conditional edge on `resolved_mode`.
+"""
 
 from __future__ import annotations
 
@@ -60,6 +65,9 @@ def retriever(state: QueryState) -> dict:
         reasoning_path.append(
             f"matched entities in question: {', '.join(e['name'] for e in matched)}"
         )
+        # Even non-multihop modes still take 1 hop -- a simple/summary
+        # question benefits from directly-related entities' chunks, it just
+        # doesn't need the deeper MAX_HOPS traversal multihop/comparison do.
         hops = config.MAX_HOPS if mode in ("multihop", "comparison", "contradiction") else 1
         neighbor_entities, hop_trace = client.multi_hop_neighbors(entity_ids, hops)
         reasoning_path.extend(hop_trace)

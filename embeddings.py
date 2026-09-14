@@ -1,4 +1,10 @@
-"""Local embedding model wrapper (Ollama)."""
+"""Local embedding model wrapper (Ollama).
+
+Always the local model, never the "complex" provider -- there is no
+config-driven choice here, unlike `config.get_llm()`. Next file to read:
+`db/arcade_client.py::ensure_schema`, the only caller of
+`embedding_dimensions()`.
+"""
 
 from __future__ import annotations
 

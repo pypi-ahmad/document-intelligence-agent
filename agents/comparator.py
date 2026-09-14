@@ -4,6 +4,7 @@ Runs instead of the plain answerer when resolved_mode is "comparison" or
 "contradiction" -- it groups retrieved context by source document so the
 complex model can reason about what each document individually says before
 comparing them.
+Next file to read: `agents/verifier.py`, which checks this node's output too.
 """
 
 from __future__ import annotations

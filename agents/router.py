@@ -2,6 +2,7 @@
 
 If the UI already forced a mode (Multi-hop / Compare / Contradictions), that
 choice is respected as-is -- the router only runs classification in "Auto".
+Next file to read: `agents/retriever.py`, the next query-graph node.
 """
 
 from __future__ import annotations

@@ -71,6 +71,9 @@ def detect_and_summarize_communities() -> int:
     if graph.number_of_nodes() < 2:
         return 0
 
+    # seed=42: Louvain is randomized; a fixed seed makes community assignment
+    # (and therefore which summary an entity ends up under) reproducible
+    # across repeated enrichment runs over the same graph.
     communities = nx.algorithms.community.louvain_communities(graph, seed=42)
     level0_meta: list[tuple[str, list[str], str]] = []  # (community_id, entity_ids, summary)
     for community in communities:
@@ -126,6 +129,9 @@ def _summarize_super_communities(
         return
 
     client = get_client()
+    # Same fixed-seed rationale as the level-0 pass above; `weight="weight"`
+    # makes Louvain use the real cross-community relation counts set above,
+    # not treat every coarse edge as equally strong.
     super_communities = nx.algorithms.community.louvain_communities(
         coarse, weight="weight", seed=42
     )

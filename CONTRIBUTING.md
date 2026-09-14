@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for looking at this project. Contributions of any size are welcome —
+Thanks for looking at this project. Contributions of any size are welcome:
 a bug report, a feature idea, a doc fix, or a pull request all count. This is
 a free, community-driven project with no company behind it, so outside
 testing and patches genuinely help it improve.
@@ -38,11 +38,11 @@ uv run streamlit run app.py
 ```
 
 Windows users can run `launch.cmd` instead, and Linux/macOS users can run
-`./launch.sh` — both do all of the above, including first-time setup.
+`./launch.sh`; both do all of the above, including first-time setup.
 
 ## Automated checks
 
-Run these before opening a pull request — all three are configured, pass
+Run these before opening a pull request. All three are configured, pass
 clean on `main`, and also run in CI (`.github/workflows/ci.yml`):
 
 ```bash
@@ -51,17 +51,17 @@ uv run ty check
 uv run pytest -v
 ```
 
-**Scope note:** `pytest` covers only the pure-logic slice — functions with
+**Scope note:** `pytest` covers only the pure-logic slice: functions with
 no LLM or ArcadeDB dependency (`utils.py`'s helpers,
 `agents/comparator.py`'s `_grouped_context`). The actual ingestion/query
 pipeline (everything that calls a local or complex LLM, or ArcadeDB) has
-**no automated test coverage** — that's a deliberate scoping decision (see
+**no automated test coverage**. That's a deliberate scoping decision (see
 [MODERNIZATION_PLAN.md](MODERNIZATION_PLAN.md) § 3), not an oversight. It's
 covered only by the manual verification below.
 
 ## Manual verification
 
-This is the only safety net for the LLM/DB-integrated pipeline — treat it
+This is the only safety net for the LLM/DB-integrated pipeline. Treat it
 as required, not optional, for any change in that area. Before opening a
 pull request for a UI-visible or pipeline-behavior change:
 
@@ -93,7 +93,7 @@ not through a public issue.
 
 This project does not want or accept donations, sponsorship, or paid
 support. Time, testing, bug reports, and pull requests are the contributions
-that help — see [SUPPORT.md](SUPPORT.md).
+that help; see [SUPPORT.md](SUPPORT.md).
 
 By contributing, you agree your contribution may be distributed under this
 project's [MIT License](LICENSE).

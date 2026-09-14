@@ -208,6 +208,9 @@ class ArcadeDBClient:
         )
 
     def create_relation(self, source_id: str, label: str, target_id: str, description: str) -> None:
+        # Dedup key is (source, target, label) only -- unlike upsert_entity,
+        # a re-extracted duplicate's description is discarded once the edge
+        # exists, it does not merge/replace the stored one.
         exists = self.query(
             "SELECT count(*) as n FROM RELATES_TO WHERE "
             "out.id = :s AND in.id = :t AND label = :label",
@@ -279,7 +282,7 @@ class ArcadeDBClient:
         if doc_filter:
             sql += " WHERE doc_name IN :docs"
             params["docs"] = doc_filter
-        sql += f" LIMIT {int(limit)}"
+        sql += f" LIMIT {int(limit)}"  # int() cast guards this raw interpolation, as in vector_search
         return self.query(sql, params)
 
     def communities_for_entities(self, entity_ids: list[str]) -> list[dict[str, Any]]:
@@ -344,6 +347,11 @@ class ArcadeDBClient:
     # -- vector search -----------------------------------------------------
 
     def vector_search(self, vector: list[float], top_k: int) -> list[dict[str, Any]]:
+        # Built as a raw SQL literal, not a bound :param, because ArcadeDB's
+        # SQL params don't support the array-literal syntax vectorNeighbors
+        # expects here. Safe only because every interpolated value is coerced
+        # through float()/int() first -- `vector` and `top_k` must never carry
+        # unsanitized user text into this string.
         literal = "[" + ",".join(repr(float(v)) for v in vector) + "]"
         sql = (
             "SELECT id, doc_id, doc_name, page, text, distance FROM "

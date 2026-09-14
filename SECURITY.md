@@ -10,13 +10,13 @@ no remote API surface beyond what you choose to run on your own machine.
 
 - `OLLAMA_BASE_URL`, `OPENAI_API_KEY`, `OPENAI_BASE_URL`, `AGNES_API_KEY`,
   and the ArcadeDB credentials are read from your local `.env` (or your
-  shell environment, which takes precedence) — never hardcoded, never sent
+  shell environment, which takes precedence), never hardcoded, never sent
   anywhere except the provider or database each value belongs to.
 - `.env` is not committed; keep it that way. `.env.example` holds
   placeholders only.
 - Ingested documents, extracted entities/relationships, and generated
   summaries are persisted in ArcadeDB, backed by the `arcadedata-data/`
-  Docker volume on your machine. This is not ephemeral — it survives
+  Docker volume on your machine. This is not ephemeral; it survives
   restarting the Streamlit process. Use the sidebar's per-document delete
   or full reset to remove it, or delete the volume directory directly.
 
@@ -38,7 +38,7 @@ network:
 You are responsible for:
 
 - keeping your own API keys and `.env` file secure;
-- the documents you ingest — see [DISCLAIMER.md](DISCLAIMER.md);
+- the documents you ingest (see [DISCLAIMER.md](DISCLAIMER.md));
 - securing the ArcadeDB container per the note above if your machine is
   network-reachable;
 - reviewing generated answers, summaries, and comparisons before relying on
@@ -53,7 +53,7 @@ Please report security issues privately through this repository's
 [GitHub private vulnerability reporting form](https://github.com/pypi-ahmad/document-intelligence-agent/security/advisories/new)
 rather than a public issue. Include the affected file/flow, a minimal
 reproduction, and the potential impact. Do not include real API keys,
-documents, or other personal data in the report — use synthetic examples.
+documents, or other personal data in the report; use synthetic examples.
 
-There is no fixed response-time guarantee and no paid bug bounty — this is
+There is no fixed response-time guarantee and no paid bug bounty. This is
 a free, community-maintained project.
