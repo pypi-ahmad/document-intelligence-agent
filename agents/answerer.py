@@ -4,6 +4,7 @@ Simple factual questions go to the local Ollama model (cheap, fast).
 Everything else (multi-hop, summary) goes to the configured complex model
 (GPT via OPENAI_BASE_URL, or Agnes), which has the reasoning headroom for
 connecting facts across chunks and communities.
+Next file to read: `agents/verifier.py`, which checks this node's output.
 """
 
 from __future__ import annotations

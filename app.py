@@ -1,4 +1,11 @@
-"""Streamlit UI for the Document Intelligence Agent."""
+"""Streamlit UI for the Document Intelligence Agent.
+
+Owns presentation and session/UI state only (file upload, chat history,
+sidebar controls) -- it must not contain pipeline logic itself; every
+ingestion/query step is a node in the LangGraph graphs built in `graph.py`.
+Next file to read: `graph.py` for how a button click here becomes a
+chunker/retriever/answerer run.
+"""
 
 from __future__ import annotations
 
@@ -69,6 +76,9 @@ def _run_ingestion(paths: list[Path]) -> None:
         run_enrichment(new_docs)
     progress.progress(1.0, text="Done.")
     st.success(f"Ingested {len(new_docs)}/{len(paths)} document(s).")
+    # bootstrap() is @st.cache_resource, so a plain rerun would skip it and
+    # reuse the cached client -- clear it so the next run re-checks ArcadeDB
+    # readiness/schema instead of assuming the pre-ingestion state still holds.
     st.cache_resource.clear()
     st.rerun()
 

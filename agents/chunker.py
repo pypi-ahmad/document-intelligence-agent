@@ -2,6 +2,7 @@
 
 Pure text processing -- no DB or embedding calls here, so ingestion can be
 retried/inspected before anything is written to the graph.
+Next file to read: `agents/graph_builder.py`, the next ingestion-graph node.
 """
 
 from __future__ import annotations

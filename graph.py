@@ -1,4 +1,11 @@
-"""LangGraph wiring: ingestion pipeline and query pipeline."""
+"""LangGraph wiring: ingestion pipeline and query pipeline.
+
+Each graph is compiled once (`lru_cache`) with no `checkpointer`, so every
+`.invoke()` is a single-shot run with no LangGraph-managed pause/resume or
+cross-call memory -- multi-turn chat context is `app.py`'s job (Streamlit
+session state), not this module's. Next file to read: `state.py` for the
+per-node input/output contract, or `agents/` for what each node does.
+"""
 
 from __future__ import annotations
 

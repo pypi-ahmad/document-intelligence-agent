@@ -1,4 +1,11 @@
-"""Shared state schemas for the two LangGraph pipelines (ingestion, query)."""
+"""Shared state schemas for the two LangGraph pipelines (ingestion, query).
+
+Both TypedDicts are `total=False`: every node in `graph.py` returns only the
+keys it computed, and LangGraph shallow-merges that partial dict into the
+running state -- a node must not assume a key it didn't set (or an earlier
+node didn't set) is present. Next file to read: `graph.py`, which wires
+these into the two compiled `StateGraph`s.
+"""
 
 from __future__ import annotations
 

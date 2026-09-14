@@ -43,7 +43,14 @@ def chunk_page_text(text: str) -> list[str]:
 
 
 def safe_json_loads(text: str) -> dict | list | None:
-    """Parse JSON out of an LLM response, tolerating ```json fences and stray prose."""
+    """Parse JSON out of an LLM response, tolerating ```json fences and stray prose.
+
+    `text` is untrusted/unstructured model output, not a validated API
+    response, even when the call requested JSON mode -- local models in
+    particular sometimes wrap the object in commentary or fences anyway.
+    Returns None (never raises) on anything unparseable so every caller must
+    handle a missing/partial result rather than assume well-formed JSON.
+    """
     text = text.strip()
     fenced = re.search(r"```(?:json)?\s*(.*?)```", text, re.DOTALL)
     if fenced:

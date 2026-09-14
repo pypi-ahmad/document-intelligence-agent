@@ -2,6 +2,8 @@
 
 Uses the local Ollama model in JSON mode for entity/relation extraction
 (cheap, runs per chunk) and the local embedding model for chunk vectors.
+This node does not run community detection/summarization itself -- that is
+`agents/enricher.py`, invoked once per batch from `app.py`, not per document.
 """
 
 from __future__ import annotations
@@ -83,6 +85,10 @@ def graph_builder(state: IngestState) -> dict:
         try:
             entities, relations = extract_entities_relations(chunk["text"])
         except Exception:  # local LLM hiccup shouldn't abort the whole document
+            # Swallowed intentionally: this chunk just contributes no graph
+            # data (its embedding above is still stored), and the failure is
+            # not surfaced to the caller or logged here -- see
+            # ARCHITECTURE.md's ADR on per-chunk extraction failures.
             entities, relations = [], []
         entity_id_by_name: dict[str, str] = {}
         for entity in entities:
@@ -94,6 +100,12 @@ def graph_builder(state: IngestState) -> dict:
             entities_created += 1
 
         for relation in relations:
+            # The extraction prompt asks the model to make source/target match
+            # an entity name it also returned, but doesn't guarantee it -- if
+            # a relation references a name missing from `entities` for this
+            # chunk, fall back to upserting it as a bare OTHER-typed entity
+            # (by name+type, so it still merges with a same-named entity
+            # extracted properly elsewhere) rather than dropping the relation.
             source_id = entity_id_by_name.get(relation["source"]) or client.upsert_entity(
                 relation["source"], "OTHER", ""
             )
