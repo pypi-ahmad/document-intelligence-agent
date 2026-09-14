@@ -282,7 +282,7 @@ class ArcadeDBClient:
         if doc_filter:
             sql += " WHERE doc_name IN :docs"
             params["docs"] = doc_filter
-        sql += f" LIMIT {int(limit)}"  # int() cast guards this raw interpolation, as in vector_search
+        sql += f" LIMIT {int(limit)}"  # int() guards raw interpolation, as in vector_search
         return self.query(sql, params)
 
     def communities_for_entities(self, entity_ids: list[str]) -> list[dict[str, Any]]:
