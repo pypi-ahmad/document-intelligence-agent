@@ -29,14 +29,14 @@ a Streamlit chat UI.
 
 This is a free, open-source (MIT), community-driven project. Cloning,
 forking, testing, filing bugs, suggesting features, and sending pull
-requests are all welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and
+requests are all welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) and
 [SUPPORT.md](SUPPORT.md). This project does not want or accept donations,
 sponsorship, or paid support of any kind; testing and patches are worth
 more here than money.
 
 You run this entirely on your own machine, with your own API keys and your
 own ArcadeDB container. Nobody but you sees your documents, extracted
-knowledge graph, or generated answers — and you are responsible for
+knowledge graph, or generated answers. You are responsible for
 everything you ingest and every answer you rely on. See
 [DISCLAIMER.md](DISCLAIMER.md) for the full breakdown, and
 [SECURITY.md](SECURITY.md) for how to report a vulnerability (including an
@@ -46,22 +46,22 @@ important note on ArcadeDB's default credentials).
 > Entity extraction, routing, and simple answers run on your local Ollama
 > model. Multi-hop, comparison, contradiction, and cross-document
 > verification questions are sent to whichever "complex" provider you
-> configure (an OpenAI-compatible endpoint, or Agnes AI) — treat that
+> configure (an OpenAI-compatible endpoint, or Agnes AI). Treat that
 > exactly like sending the document content to that provider yourself.
 
 ## Features
 
-- **Multi-document ingestion** — upload PDFs or point at a server-side folder; batch progress shown in the UI.
-- **Knowledge graph construction** — entities and relationships are extracted per chunk and persisted as a graph (`Document → Chunk → Entity → Community`) in ArcadeDB.
-- **Hierarchical summarization** — Louvain community detection over the entity graph, with summaries generated at the community, super-community, document, and corpus level.
-- **Hybrid retrieval** — vector similarity search (ArcadeDB `LSM_VECTOR` index) combined with multi-hop graph traversal (BFS over `RELATES_TO` edges) and community-summary context.
-- **Query routing** — an LLM classifies each question as simple / multi-hop / comparison / contradiction / summary and routes it to the matching pipeline branch.
-- **Multi-document comparison & contradiction detection** — a dedicated comparator groups retrieved context by source document and reports agreement/conflict with evidence from each side.
-- **Answer verification** — every answer gets a groundedness check against its cited source chunks; comparison/contradiction answers get an additional cross-document consistency pass.
-- **Citations** — every answer cites `[DocumentName p.Page]`; the UI shows a sources panel, the reasoning path (for multi-hop), and the verification result.
-- **Local-first LLMs, cloud for hard reasoning** — Ollama runs entity extraction, routing, and simple answers locally; a configurable "complex" provider (any OpenAI-compatible endpoint, or Agnes AI) handles multi-hop reasoning, comparison, and verification.
-- **Persistent** — the knowledge graph lives in ArcadeDB (Docker volume), independent of the Streamlit process; restarting the app does not lose ingested documents.
-- **Knowledge base management** — per-document delete, and a full reset, from the sidebar.
+- Multi-document ingestion: upload PDFs or point at a server-side folder, with batch progress shown in the UI.
+- Knowledge graph construction: entities and relationships are extracted per chunk and persisted as a graph (`Document → Chunk → Entity → Community`) in ArcadeDB.
+- Hierarchical summarization: Louvain community detection over the entity graph, with summaries generated at the community, super-community, document, and corpus level.
+- Hybrid retrieval: vector similarity search (ArcadeDB `LSM_VECTOR` index) combined with multi-hop graph traversal (BFS over `RELATES_TO` edges) and community-summary context.
+- Query routing: an LLM classifies each question as simple, multi-hop, comparison, contradiction, or summary, and routes it to the matching pipeline branch.
+- Multi-document comparison and contradiction detection: a dedicated comparator groups retrieved context by source document and reports agreement or conflict with evidence from each side.
+- Answer verification: every answer gets a groundedness check against its cited source chunks, and comparison/contradiction answers get an additional cross-document consistency pass.
+- Citations: every answer cites `[DocumentName p.Page]`. The UI shows a sources panel, the reasoning path for multi-hop questions, and the verification result.
+- Local-first LLMs, cloud for hard reasoning: Ollama runs entity extraction, routing, and simple answers locally, while a configurable "complex" provider (any OpenAI-compatible endpoint, or Agnes AI) handles multi-hop reasoning, comparison, and verification.
+- Persistent: the knowledge graph lives in ArcadeDB (Docker volume), independent of the Streamlit process, so restarting the app does not lose ingested documents.
+- Knowledge base management: per-document delete, and a full reset, from the sidebar.
 
 ## Tech Stack
 
@@ -71,8 +71,8 @@ important note on ArcadeDB's default credentials).
 | Orchestration | [LangGraph](https://github.com/langchain-ai/langgraph) |
 | Graph database | [ArcadeDB](https://arcadedb.com/) (accessed over its HTTP REST API) |
 | Local embeddings | Ollama (`nomic-embed-text-v2-moe` by default) |
-| Local LLM | Ollama (`qwen3.5:2b` by default) — routing, entity/relation extraction, simple answers |
-| Complex-reasoning LLM | Any OpenAI-compatible endpoint (`OPENAI_BASE_URL`), or [Agnes AI](https://www.agnes-ai.com/en/docs/overview) — multi-hop reasoning, comparison, verification |
+| Local LLM | Ollama (`qwen3.5:2b` by default), for routing, entity/relation extraction, and simple answers |
+| Complex-reasoning LLM | Any OpenAI-compatible endpoint (`OPENAI_BASE_URL`), or [Agnes AI](https://www.agnes-ai.com/en/docs/overview), for multi-hop reasoning, comparison, and verification |
 | Community detection | [NetworkX](https://networkx.org/) (Louvain) |
 | PDF parsing | [pypdf](https://pypdf.readthedocs.io/) |
 | Package management | [uv](https://docs.astral.sh/uv/) |
@@ -129,7 +129,7 @@ important note on ArcadeDB's default credentials).
    entities from the question, does a BFS over `RELATES_TO` for multi-hop
    questions, and pulls in relevant community summaries.
 3. `answerer` (simple questions) or `comparator` (comparison/contradiction
-   questions) generates a grounded, cited answer — comparator groups context
+   questions) generates a grounded, cited answer; comparator groups context
    by source document first so the model can reason about what each document
    says before comparing them.
 4. `verifier` checks the answer's groundedness against the retrieved chunks,
@@ -185,7 +185,7 @@ uv run streamlit run app.py
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` and fill in what you need — or just set these
+Copy `.env.example` to `.env` and fill in what you need, or just set these
 in your shell/system environment (real environment variables always take
 precedence over `.env`).
 
@@ -200,7 +200,7 @@ precedence over `.env`).
 | `AGNES_API_KEY` | — | Key for [Agnes AI](https://www.agnes-ai.com/en/docs/overview) (alternative complex provider) |
 | `AGNES_BASE_URL` | `https://apihub.agnes-ai.com/v1` | Agnes AI endpoint |
 | `AGNES_MODEL` | `agnes-2.5-flash` | Agnes model name |
-| `COMPLEX_LLM_PROVIDER` | `openai` | `openai` or `agnes` — which provider handles multi-hop/verification/comparison |
+| `COMPLEX_LLM_PROVIDER` | `openai` | `openai` or `agnes`: which provider handles multi-hop/verification/comparison |
 | `ARCADEDB_HOST` / `ARCADEDB_PORT` | `localhost` / `2480` | ArcadeDB server |
 | `ARCADEDB_DATABASE` | `docintel` | Database name |
 | `ARCADEDB_USER` / `ARCADEDB_PASSWORD` | `root` / `playwithdata` | ArcadeDB credentials |
@@ -214,8 +214,8 @@ precedence over `.env`).
 
 1. In the sidebar, upload one or more PDFs (or enter a server-side folder
    path) and click **Ingest**. Progress and resulting graph stats show live.
-2. Pick a **Mode** — Auto, Simple QA, Multi-hop, Comparison, Contradiction
-   Detection, or Summary — and optionally restrict to specific documents.
+2. Pick a **Mode** (Auto, Simple QA, Multi-hop, Comparison, Contradiction
+   Detection, or Summary) and optionally restrict to specific documents.
 3. Ask a question in the chat box. The response includes a sources panel,
    and (for multi-hop/comparison/contradiction questions) a reasoning path
    and verification result.
@@ -256,7 +256,7 @@ the cost of latency).
   added documents, instead of a full recompute)
 - Authentication/multi-tenant knowledge bases
 - Automated test coverage for the LLM/DB-integrated pipeline (ingestion,
-  retrieval, answering, verification) — CI currently covers only lint,
+  retrieval, answering, verification). CI currently covers only lint,
   typecheck, and a small pure-logic test suite; see
   [MODERNIZATION_PLAN.md](MODERNIZATION_PLAN.md) for why that's a deliberate
   scoping decision for a solo local tool, not an oversight

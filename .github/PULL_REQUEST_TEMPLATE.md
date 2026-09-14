@@ -5,7 +5,7 @@ Describe the user-visible problem and the smallest complete solution.
 ## Validation
 
 List the manual checks you ran (see CONTRIBUTING.md's "Manual verification"
-section) and their results. Note there's no automated test suite yet — a
+section) and their results. Note there's no automated test suite yet, so a
 manual walkthrough (ingest → query in the affected mode) is expected.
 
 ## Checklist
